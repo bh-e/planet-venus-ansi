@@ -1,0 +1,19 @@
+- name: Update the debian system
+  hosts: apache
+  tasks:
+    - name: install apache2
+      apt: name=apache2 update_cache=yes state=latest
+    - name: install planet-venus
+      apt: name=planet-venus state=latest
+    - name: make directory for planet-theme
+      file: path=/var/www/html/planet-theme state=directory 
+    - name: make directory for planet-cache
+      file: path=/var/www/html/planet-cache state=directory 
+    - name: copy files from deafault theme to planet-theme
+      command: cp -R /usr/share/planet-venus/theme/default/ /var/www/html/planet-theme/  
+    - name: Delete index of apache
+      file: path=/var/www/html/index.html state=absent
+    - name: copy files...
+      command: cp /root/planet.conf /var/www/html/ 
+    - name: run planet
+      command: planet /var/www/html/planet.conf
